@@ -1,10 +1,8 @@
 defmodule TableFormatter do
-
   def print_table_for_columns(rows, headers) do
     with data_by_columns = split_into_columns(rows, headers),
-         column_widths   = widths_of(data_by_columns),
-         format          = format_for(column_widths)
-    do
+         column_widths = widths_of(data_by_columns),
+         format = format_for(column_widths) do
       puts_one_line_in_columns(headers, format)
       IO.puts(separator(column_widths))
       puts_in_columns(data_by_columns, format)
@@ -24,7 +22,7 @@ defmodule TableFormatter do
     for column <- columns do
       column
       |> Enum.map(&String.length/1)
-      |> Enum.max
+      |> Enum.max()
     end
   end
 
@@ -38,7 +36,7 @@ defmodule TableFormatter do
 
   def puts_in_columns(data_by_columns, format) do
     data_by_columns
-    |> List.zip
+    |> List.zip()
     |> Enum.map(&Tuple.to_list/1)
     |> Enum.each(&puts_one_line_in_columns(&1, format))
   end
@@ -46,5 +44,4 @@ defmodule TableFormatter do
   def puts_one_line_in_columns(fields, format) do
     :io.format(format, fields)
   end
-
 end
