@@ -1,6 +1,5 @@
 defmodule Issues.CLI do
-
-  import TableFormatter, only: [ print_table_for_columns: 2 ]
+  import TableFormatter, only: [print_table_for_columns: 2]
 
   @default_count 4
 
@@ -18,10 +17,11 @@ defmodule Issues.CLI do
 
   def process(:help) do
     IO.puts("""
-      usage: issues <user> <project> [ count | #{@default_count} ]
-      """)
+    usage: issues <user> <project> [ count | #{@default_count} ]
+    """)
   end
-  def process({ user, project, count }) do
+
+  def process({user, project, count}) do
     Issues.GithubIssues.fetch(user, project)
     |> decode_response()
     |> sort_into_descending_order()
@@ -29,8 +29,9 @@ defmodule Issues.CLI do
     |> print_table_for_columns(["number", "created_at", "title"])
   end
 
-  def decode_response({ :ok, body }), do: body
-  def decode_response({ :error, error }) do
+  def decode_response({:ok, body}), do: body
+
+  def decode_response({:error, error}) do
     IO.puts("Error fetching from Github: #{error["message"]}")
     System.halt(2)
   end
@@ -54,19 +55,20 @@ defmodule Issues.CLI do
   """
 
   def parse_args(argv) do
-    OptionParser.parse(argv, switches: [ help: :boolean ], aliases: [ h: :help ])
+    OptionParser.parse(argv, switches: [help: :boolean], aliases: [h: :help])
     |> elem(1)
     |> args_to_internal_representation()
   end
 
   def args_to_internal_representation([user, project, count]) do
-    { user, project, String.to_integer(count) }
+    {user, project, String.to_integer(count)}
   end
+
   def args_to_internal_representation([user, project]) do
-    { user, project, @default_count }
+    {user, project, @default_count}
   end
+
   def args_to_internal_representation(_) do
     :help
   end
-
 end
